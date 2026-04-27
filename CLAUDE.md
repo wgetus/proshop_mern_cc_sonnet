@@ -145,6 +145,7 @@ Auth legend: `—` public, `🔒` requires JWT (`protect`), `🛡` requires admi
 - **Mongoose v5** — `.save()` returns the saved document; chaining `.populate()` after `.save()` requires a separate `.findById()` query
 - **`colors` package** — used for terminal logging in `seeder.js` and `server.js`; safe to leave, don't remove
 - **`POST /api/upload` has no auth middleware** — known gap; don't assume this is the pattern for other routes
+- **`NODE_ENV` must be a real environment variable** — `dotenv` is not loaded in `app.js`; if `NODE_ENV` is set only via `.env`, morgan won't activate in development and the production static-file branch won't trigger. Set `NODE_ENV` in your shell or deployment environment (not just `.env`).
 
 ## Deployment
 
