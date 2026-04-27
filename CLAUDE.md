@@ -167,3 +167,17 @@ Constraints Claude must respect unless explicitly instructed otherwise:
 - **Do not add `try/catch` in controllers** — `express-async-handler` propagates thrown errors to the global handler in `errorMiddleware.js`; trust it
 - **Do not add backend test files inside `frontend/`** — backend tests live in `backend/__tests__/`
 - **React 16 is intentional** — do not upgrade to React 18 without explicit instruction; hooks API is available but concurrent features are not
+
+## Backend Testing
+
+```bash
+npm run test:backend    # Run all backend tests (Jest + Supertest)
+```
+
+Test files live in `backend/__tests__/`. Install dependencies once from the project root: `npm install --save-dev jest supertest`.
+
+- `--experimental-vm-modules` is required because backend uses ES modules (`"type": "module"`)
+- Express app config lives in `backend/app.js` (exported); `server.js` imports it and calls `listen`
+- Tests import from `backend/app.js` directly — no DB connection is made during tests
+- Pattern: `import request from 'supertest'; import app from '../app.js'` then `await request(app).get('/path')`
+- `transform: {}` in jest config disables Babel transform — required for native ESM; do not remove it
