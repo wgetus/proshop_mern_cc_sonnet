@@ -52,7 +52,8 @@ Express REST API using ES modules (`"type": "module"` in package.json).
 
 **Request lifecycle:** `server.js` → routes → `authMiddleware` (protect/admin) → controller → Mongoose model → response
 
-- `server.js` — Express entry point; mounts routes under `/api/*`, serves `uploads/` static files, serves React build in production, registers global error handler
+- `app.js` — Express entry point; mounts routes under `/api/*`, serves `uploads/` static files, serves React build in production, registers global error handler; exported for testability
+- `server.js` — Process entry point; loads `.env`, connects MongoDB, calls `app.listen()`
 - `config/db.js` — Mongoose connection
 - `middleware/authMiddleware.js` — `protect` (JWT verification, attaches `req.user`) and `admin` (checks `req.user.isAdmin`)
 - `middleware/errorMiddleware.js` — Global error handler; maps status codes, exposes stack trace in dev

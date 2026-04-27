@@ -1,3 +1,4 @@
+import dotenv from 'dotenv'
 import path from 'path'
 import express from 'express'
 import morgan from 'morgan'
@@ -6,6 +7,8 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+
+dotenv.config()
 
 const app = express()
 
