@@ -58,6 +58,8 @@ Versions below are taken from `package.json` and `frontend/package.json`.
 └── Procfile              Heroku process definition
 ```
 
+See [docs/architecture.md](docs/architecture.md) for the Mermaid C4-container architecture diagram and checkout data flow.
+
 ## Prerequisites
 
 - Docker with Docker Compose: install from the [Docker documentation](https://docs.docker.com/get-docker/).

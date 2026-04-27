@@ -46,6 +46,8 @@ After seeding (`npm run data:import`), sample credentials:
 
 ## Architecture
 
+See [docs/architecture.md](docs/architecture.md) for the Mermaid C4-container architecture diagram and checkout data flow.
+
 ### Backend (`/backend`)
 
 Express REST API using ES modules (`"type": "module"` in package.json).
