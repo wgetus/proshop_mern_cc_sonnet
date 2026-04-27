@@ -37,6 +37,7 @@
   "jest": {
     "testEnvironment": "node",
     "transform": {},
-    "roots": ["<rootDir>/backend"]
+    "roots": ["<rootDir>/backend"],
+    "testMatch": ["**/__tests__/**/*.js"]
   }
 }
