@@ -45,7 +45,6 @@
       "<rootDir>/backend"
     ],
     "testMatch": [
-      "**/__tests__/**/*.js",
       "**/*.test.js"
     ],
     "setupFiles": [
