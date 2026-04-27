@@ -6,7 +6,7 @@
 
 **Architecture:** Static documentation sections are appended directly to CLAUDE.md. Backend testing requires splitting `server.js` into `backend/app.js` (exports Express app) and a slimmed `server.js` (imports app, calls listen) so Supertest can import the app without starting a server or connecting to MongoDB.
 
-**Tech Stack:** Jest 29, Supertest, Node 20 ES modules (`--experimental-vm-modules`)
+**Tech Stack:** Jest 30, Supertest, Node 20 ES modules (`--experimental-vm-modules`)
 
 ---
 
