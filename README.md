@@ -73,7 +73,7 @@ For the first start, create a development `.env` from the example file:
 cp .env.example .env
 ```
 
-Taskfile also runs this copy automatically before Docker commands when `.env` is missing. The example contains the variables read by the backend code:
+Taskfile runs this copy automatically before Docker commands when `.env` is missing. The example contains the variables read by the backend code:
 
 ```env
 NODE_ENV=development
