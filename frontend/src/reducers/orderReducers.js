@@ -47,29 +47,40 @@ export const orderCreateReducer = (state = {}, action) => {
   }
 }
 
+const orderDetailsInitialState = {
+  loading: true,
+  orderItems: [],
+  shippingAddress: {},
+}
+
+const requestOrderDetails = (state) => ({
+  ...state,
+  loading: true,
+})
+
+const receiveOrderDetails = (action) => ({
+  loading: false,
+  order: action.payload,
+})
+
+const failOrderDetails = (action) => ({
+  loading: false,
+  error: action.payload,
+})
+
+const orderDetailsHandlers = {
+  [ORDER_DETAILS_REQUEST]: requestOrderDetails,
+  [ORDER_DETAILS_SUCCESS]: (state, action) => receiveOrderDetails(action),
+  [ORDER_DETAILS_FAIL]: (state, action) => failOrderDetails(action),
+}
+
 export const orderDetailsReducer = (
-  state = { loading: true, orderItems: [], shippingAddress: {} },
+  state = orderDetailsInitialState,
   action
 ) => {
-  switch (action.type) {
-    case ORDER_DETAILS_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      }
-    case ORDER_DETAILS_SUCCESS:
-      return {
-        loading: false,
-        order: action.payload,
-      }
-    case ORDER_DETAILS_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-      }
-    default:
-      return state
-  }
+  const handler = orderDetailsHandlers[action.type]
+
+  return handler ? handler(state, action) : state
 }
 
 export const orderPayReducer = (state = {}, action) => {
