@@ -57,7 +57,7 @@ Add to root `package.json` (top level):
 - Test files live in `backend/__tests__/`
 - Use `supertest` to spin up the Express app for route-level tests
 - `--experimental-vm-modules` is required because backend uses ES modules (`"type": "module"`)
-- Pattern: import the Express app from `server.js`, wrap with `supertest(app)`, assert on response status/body
+- `server.js` does not export `app` — extract Express config into `backend/app.js` (export default `app`), update `server.js` to import it and call `listen`. Tests import from `app.js`.
 ```
 
 ---
@@ -119,6 +119,7 @@ Runtime quirks and architectural decisions that would otherwise be non-obvious.
 - `uploads/` files are not cleaned up on product delete
 - Mongoose v5 `.save()` quirk — chain `.populate()` requires a separate `.findById()`
 - `colors` package is used in backend logging
+- `POST /api/upload` has no auth middleware — known gap, don't remove auth from other routes assuming this is the pattern
 
 ---
 
