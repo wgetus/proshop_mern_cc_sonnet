@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/proshop
+      JWT_SECRET: ${JWT_SECRET:-abc123}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      mongo:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+
+  seed:
+    build:
+      context: .
+    command: npm run data:seed-on-empty
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/proshop
+      JWT_SECRET: ${JWT_SECRET:-abc123}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:6.0
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  mongo-data:
