@@ -1,0 +1,9 @@
+# FINDINGS — proshop_mern
+
+| # | Риск | Где | Что | Как фиксить | Статус |
+|---|------|-----|-----|-------------|--------|
+| 1 | 🔴 | backend/controllers/orderController.js::addOrderItems | Сервер принимает orderItems и цены напрямую от клиента; null, не-массив, отрицательные qty/price и подмена totals не валидируются. | Валидировать shape входа, загружать продукты из БД, пересчитывать цены/налоги/доставку на сервере и отклонять несоответствия. | ✅ fixed |
+| 2 | 🔴 | backend/controllers/orderController.js::updateOrderToPaid | Заказ помечается оплаченным по телу запроса без server-side проверки PayPal transaction/order id, суммы, валюты и статуса; req.body.payer может быть null. | Проверять платеж через PayPal API/server-side capture before marking paid и валидировать все поля paymentResult. | 🔴 not yet |
+| 3 | 🔴 | backend/routes/uploadRoutes.js::router.post | Upload endpoint публичный, без protect/admin, без limits.fileSize, без проверки отсутствующего req.file и пишет в hardcoded uploads/. | Закрыть endpoint auth/admin, добавить multer limits, явную обработку ошибок/empty file и вынести upload path в конфиг. | 🔴 not yet |
+| 4 | 🔴 | package.json::dependencies / frontend/package.json::dependencies | Стек сильно отстал: mongoose 5.x, express 4.x, multer 1.x, axios 0.x, React 16.x; это повышает риск CVE, несовместимости tooling и migration debt. | Делать поэтапный dependency upgrade с lockfile audit, migration notes и backend/frontend regression tests. | 🔴 not yet |
+| 5 | 🟡 | frontend/src/screens/OrderScreen.js::OrderScreen / frontend/src/screens/PlaceOrderScreen.js::PlaceOrderScreen | Компоненты >50 строк смешивают routing, расчет цен, async SDK loading, Redux dispatch и render; дополнительно мутируют объекты из Redux во время render, а значения 100, 0.15 и PayPal SDK URL захардкожены. | Вынести pricing в pure helper/config, не мутировать Redux state в render и разделить UI/side effects на меньшие компоненты/hooks. | 🔴 not yet |
