@@ -129,6 +129,11 @@ Auth legend: `—` public, `🔒` requires JWT (`protect`), `🛡` requires admi
 |--------|------|------|-------------|
 | POST | `/api/upload` | — | Upload image (jpg/jpeg/png only) |
 
+### Config
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | `/api/config/paypal` | — | Returns PAYPAL_CLIENT_ID env var |
+
 ## Gotchas & Known Issues
 
 - **ES modules throughout backend** — all imports must use `import`/`export`, never `require()`. Relative imports require the `.js` extension (e.g., `import db from './config/db.js'`)
@@ -142,7 +147,7 @@ Auth legend: `—` public, `🔒` requires JWT (`protect`), `🛡` requires admi
 
 ## Deployment
 
-Configured for Heroku via `Procfile` (`web: npm start`).
+Configured for Heroku via `Procfile` (`web: node backend/server.js`).
 
 - `heroku-postbuild` in root `package.json` installs frontend deps and builds the React app automatically on push
 - `NODE_ENV=production` causes `server.js` to serve `frontend/build/` as static files — run `cd frontend && npm run build` locally to test this
