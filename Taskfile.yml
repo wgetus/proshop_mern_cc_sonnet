@@ -16,8 +16,15 @@ tasks:
     cmds:
       - task --list
 
+  ensure-env:
+    internal: true
+    desc: Create a development .env file when it is missing
+    cmds:
+      - test -f .env || cp .env.example .env
+
   start:
     desc: Start the development stack with Docker Compose
+    deps: [ensure-env]
     cmds:
       - "{{.DEV_COMPOSE}} up --build"
 
@@ -28,16 +35,19 @@ tasks:
 
   server:
     desc: Start the backend API with nodemon inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN_PORTS}} sh -c '{{.APP_SETUP}} && npm run server'"
 
   client:
     desc: Start the React frontend inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN_PORTS}} sh -c '{{.APP_SETUP}} && npm run client'"
 
   prod:
     desc: Start the production stack with Docker Compose
+    deps: [ensure-env]
     cmds:
       - "{{.PROD_COMPOSE}} up --build"
 
@@ -48,40 +58,48 @@ tasks:
 
   build:
     desc: Build the React frontend inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run build --prefix frontend'"
 
   install:
     desc: Install root and frontend dependencies inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}}'"
 
   seed:
     desc: Import sample users and products inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run data:import'"
 
   seed-empty:
     desc: Seed sample data only when the database is empty inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run data:seed-on-empty'"
 
   destroy:
     desc: Destroy seeded data inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run data:destroy'"
 
   test:
     desc: Run backend and end-to-end tests inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm test'"
 
   test-backend:
     desc: Run backend Jest tests inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run test:backend'"
 
   test-e2e:
     desc: Run Playwright end-to-end tests inside Docker
+    deps: [ensure-env]
     cmds:
       - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run test:e2e'"

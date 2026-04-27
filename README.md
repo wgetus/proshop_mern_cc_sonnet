@@ -67,14 +67,20 @@ Versions below are taken from `package.json` and `frontend/package.json`.
 
 ## Environment Variables
 
-Create `.env` in the project root. These are the variables read by the backend code:
+For the first start, create a development `.env` from the example file:
+
+```bash
+cp .env.example .env
+```
+
+Taskfile also runs this copy automatically before Docker commands when `.env` is missing. The example contains the variables read by the backend code:
 
 ```env
 NODE_ENV=development
 PORT=5000
 MONGO_URI=mongodb://mongo:27017/proshop
 JWT_SECRET=replace_with_a_local_secret
-PAYPAL_CLIENT_ID=replace_with_paypal_sandbox_client_id
+PAYPAL_CLIENT_ID=
 ```
 
 Notes:
@@ -95,6 +101,8 @@ Install root and frontend dependencies inside the Docker app container:
 task install
 ```
 
+If `.env` does not exist yet, this command creates it from `.env.example` first.
+
 ## Run Locally
 
 Start the development stack:
@@ -102,6 +110,8 @@ Start the development stack:
 ```bash
 task start
 ```
+
+If `.env` does not exist yet, this command creates it from `.env.example` first.
 
 This starts Docker Compose from `docker-compose.dev.yml`:
 
