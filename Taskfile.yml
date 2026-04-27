@@ -1,0 +1,87 @@
+version: '3'
+
+dotenv:
+  - .env
+
+vars:
+  DEV_COMPOSE: docker compose -f docker-compose.dev.yml
+  PROD_COMPOSE: docker compose -f docker-compose.yml
+  APP_RUN: docker compose -f docker-compose.dev.yml run --rm app
+  APP_RUN_PORTS: docker compose -f docker-compose.dev.yml run --rm --service-ports app
+  APP_SETUP: npm install && npm install --prefix frontend
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  start:
+    desc: Start the development stack with Docker Compose
+    cmds:
+      - "{{.DEV_COMPOSE}} up --build"
+
+  stop:
+    desc: Stop the Docker Compose development stack
+    cmds:
+      - "{{.DEV_COMPOSE}} down"
+
+  server:
+    desc: Start the backend API with nodemon inside Docker
+    cmds:
+      - "{{.APP_RUN_PORTS}} sh -c '{{.APP_SETUP}} && npm run server'"
+
+  client:
+    desc: Start the React frontend inside Docker
+    cmds:
+      - "{{.APP_RUN_PORTS}} sh -c '{{.APP_SETUP}} && npm run client'"
+
+  prod:
+    desc: Start the production stack with Docker Compose
+    cmds:
+      - "{{.PROD_COMPOSE}} up --build"
+
+  prod-stop:
+    desc: Stop the production Docker Compose stack
+    cmds:
+      - "{{.PROD_COMPOSE}} down"
+
+  build:
+    desc: Build the React frontend inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run build --prefix frontend'"
+
+  install:
+    desc: Install root and frontend dependencies inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}}'"
+
+  seed:
+    desc: Import sample users and products inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run data:import'"
+
+  seed-empty:
+    desc: Seed sample data only when the database is empty inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run data:seed-on-empty'"
+
+  destroy:
+    desc: Destroy seeded data inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run data:destroy'"
+
+  test:
+    desc: Run backend and end-to-end tests inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm test'"
+
+  test-backend:
+    desc: Run backend Jest tests inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run test:backend'"
+
+  test-e2e:
+    desc: Run Playwright end-to-end tests inside Docker
+    cmds:
+      - "{{.APP_RUN}} sh -c '{{.APP_SETUP}} && npm run test:e2e'"

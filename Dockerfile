@@ -2,9 +2,6 @@ FROM node:18-bullseye AS build
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
-
 COPY frontend/package*.json ./frontend/
 RUN npm ci --prefix frontend
 
