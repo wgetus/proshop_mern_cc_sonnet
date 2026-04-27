@@ -12,7 +12,9 @@
     "data:import": "node backend/seeder",
     "data:seed-on-empty": "node backend/seedOnEmpty",
     "data:destroy": "node backend/seeder -d",
-    "test:backend": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:backend": "node --experimental-vm-modules node_modules/.bin/jest --runInBand",
+    "test:e2e": "node e2e/run-playwright.js",
+    "test": "npm run test:backend && npm run test:e2e",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Brad Traversy",
@@ -29,15 +31,25 @@
     "multer": "^1.4.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "concurrently": "^5.3.0",
     "jest": "^30.3.0",
+    "mongodb-memory-server": "^11.0.1",
     "nodemon": "^2.0.4",
     "supertest": "^7.2.2"
   },
   "jest": {
     "testEnvironment": "node",
     "transform": {},
-    "roots": ["<rootDir>/backend"],
-    "testMatch": ["**/__tests__/**/*.js"]
+    "roots": [
+      "<rootDir>/backend"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/*.test.js"
+    ],
+    "setupFiles": [
+      "<rootDir>/backend/__tests__/helpers/jestEnv.js"
+    ]
   }
 }
